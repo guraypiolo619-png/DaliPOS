@@ -1,0 +1,54 @@
+{{> head }}
+<style>
+  @media print {
+    body { background: white !important; }
+    .no-print { display: none !important; }
+    .receipt-card { box-shadow: none !important; border: 0 !important; }
+    main { padding: 0 !important; }
+  }
+</style>
+<body class="min-h-screen bg-slate-100 text-slate-800">
+  {{> nav }}
+  <main class="mx-auto max-w-2xl px-4 py-8 sm:px-6">
+    <div class="no-print mb-4 flex justify-between">
+      {{#if user.isAdmin}}<a href="/sales" class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-bold hover:bg-slate-50">Back to sales</a>{{else}}<a href="/dashboard" class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-bold hover:bg-slate-50">Back to POS</a>{{/if}}
+      <button type="button" onclick="window.print()" class="rounded-lg bg-pink-700 px-4 py-2 text-sm font-bold text-white hover:bg-pink-800">Print receipt</button>
+    </div>
+    <article class="receipt-card rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-10">
+      <header class="border-b border-dashed border-slate-300 pb-6 text-center">
+        <p class="text-sm font-bold uppercase tracking-[0.2em] text-pink-700">DALI</p>
+        <h1 class="mt-1 text-2xl font-black text-slate-900">Everyday Discount Store</h1>
+        <p class="mt-2 text-sm text-slate-500">Sales receipt</p>
+      </header>
+      <section class="grid gap-3 border-b border-dashed border-slate-300 py-5 text-sm sm:grid-cols-2">
+        <p><span class="text-slate-500">Receipt no.</span><br><strong>#{{sale.id}}</strong></p>
+        <p><span class="text-slate-500">Date &amp; time</span><br><strong>{{sale.createdAt}}</strong></p>
+        <p><span class="text-slate-500">Customer</span><br><strong>{{sale.customerName}}</strong></p>
+        <p><span class="text-slate-500">Cashier</span><br><strong>{{sale.cashier.name}}</strong></p>
+      </section>
+      <section class="py-5">
+        <div class="mb-3 grid grid-cols-[1fr_auto] border-b border-slate-200 pb-2 text-xs font-bold uppercase tracking-wider text-slate-500"><span>Item</span><span class="text-right">Amount</span></div>
+        <div class="space-y-4">
+          {{#each sale.items}}
+          <div class="grid grid-cols-[1fr_auto] gap-3 text-sm">
+            <div><p class="font-bold text-slate-900">{{productName}}</p><p class="mt-1 text-slate-500">{{quantity}} × ₱{{unitPrice}}</p></div>
+            <strong class="text-right">₱{{subtotal}}</strong>
+          </div>
+          {{/each}}
+        </div>
+      </section>
+      <section class="space-y-2 border-t border-dashed border-slate-300 pt-5 text-sm">
+        <div class="flex justify-between"><span class="text-slate-500">Subtotal</span><strong>₱{{sale.subtotal}}</strong></div>
+        <div class="flex justify-between"><span class="text-slate-500">Tax (12%)</span><strong>₱{{sale.taxAmount}}</strong></div>
+        <div class="flex justify-between text-lg font-black text-slate-900"><span>Total</span><span>₱{{sale.total}}</span></div>
+        <div class="flex justify-between"><span class="text-slate-500">Payment method</span><strong>{{sale.paymentMethodLabel}}</strong></div>
+        <div class="flex justify-between"><span class="text-slate-500">Amount tendered</span><strong>₱{{sale.amountTendered}}</strong></div>
+        <div class="flex justify-between"><span class="text-slate-500">Change</span><strong>₱{{sale.changeGiven}}</strong></div>
+      </section>
+      <footer class="mt-8 border-t border-dashed border-slate-300 pt-5 text-center text-sm text-slate-500">
+        <p class="font-semibold text-slate-700">Thank you for shopping with us!</p>
+        <p class="mt-1">Please keep this receipt for your records.</p>
+      </footer>
+    </article>
+  </main>
+  {{> footer }}

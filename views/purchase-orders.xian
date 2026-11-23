@@ -1,0 +1,223 @@
+{{> head }}
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  {{> nav }}
+  <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+    {{> alerts }}
+    <div class="mb-7">
+      <p class="text-sm font-bold uppercase tracking-wider text-pink-700">Admin · Inventory</p>
+      <h1 class="mt-1 text-3xl font-black text-slate-900">Suppliers &amp; purchase orders</h1>
+      <p class="mt-2 text-slate-500">Order products from suppliers, record partial deliveries, and update stock when items arrive.</p>
+    </div>
+
+    <section class="grid gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.9fr)]">
+      <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <h2 class="mb-4 text-lg font-bold">Add a supplier</h2>
+        <form action="/admin/suppliers" method="post" class="grid gap-3 sm:grid-cols-2">
+          <input name="name" maxlength="150" required placeholder="Supplier name" class="rounded-lg border border-slate-300 px-3 py-2">
+          <input name="contactName" maxlength="150" placeholder="Contact person (optional)" class="rounded-lg border border-slate-300 px-3 py-2">
+          <input name="phone" maxlength="32" type="tel" placeholder="Phone (optional)" class="rounded-lg border border-slate-300 px-3 py-2">
+          <input name="email" maxlength="255" type="email" placeholder="Email (optional)" class="rounded-lg border border-slate-300 px-3 py-2">
+          <input name="address" maxlength="255" placeholder="Address (optional)" class="rounded-lg border border-slate-300 px-3 py-2 sm:col-span-2">
+          <button class="rounded-lg bg-pink-700 px-4 py-2 font-bold text-white hover:bg-pink-800">Save supplier</button>
+        </form>
+      </article>
+      <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <h2 class="mb-4 text-lg font-bold">Supplier directory</h2>
+        {{#if suppliers.length}}
+        <div class="max-h-72 space-y-3 overflow-y-auto">
+          {{#each suppliers}}
+          <div class="rounded-xl border border-slate-200 p-3">
+            <form action="/admin/suppliers/{{id}}/update" method="post" class="grid gap-2 sm:grid-cols-2">
+              <input name="name" value="{{name}}" maxlength="150" required aria-label="Supplier name" class="rounded border border-slate-300 px-2 py-1.5">
+              <input name="contactName" value="{{contactName}}" maxlength="150" placeholder="Contact person" aria-label="Contact person" class="rounded border border-slate-300 px-2 py-1.5">
+              <input name="phone" value="{{phone}}" maxlength="32" type="tel" placeholder="Phone" aria-label="Supplier phone" class="rounded border border-slate-300 px-2 py-1.5">
+              <input name="email" value="{{email}}" maxlength="255" type="email" placeholder="Email" aria-label="Supplier email" class="rounded border border-slate-300 px-2 py-1.5">
+              <input name="address" value="{{address}}" maxlength="255" placeholder="Address" aria-label="Supplier address" class="rounded border border-slate-300 px-2 py-1.5 sm:col-span-2">
+              <div class="flex items-center justify-between sm:col-span-2">
+                <span class="text-xs font-semibold {{#if isActive}}text-emerald-700{{else}}text-slate-500{{/if}}">{{#if isActive}}Active{{else}}Inactive{{/if}}</span>
+                <div class="flex gap-2">
+                  <button class="rounded bg-slate-900 px-3 py-1.5 text-xs font-bold text-white">Update</button>
+            </form>
+                  <form action="/admin/suppliers/{{id}}/toggle" method="post"><button class="rounded border border-slate-300 px-3 py-1.5 text-xs font-semibold">{{#if isActive}}Deactivate{{else}}Activate{{/if}}</button></form>
+                </div>
+              </div>
+          </div>
+          {{/each}}
+        </div>
+        {{else}}
+        <p class="text-sm text-slate-500">No suppliers yet. Add one to start a purchase order.</p>
+        {{/if}}
+      </article>
+    </section>
+
+    <section class="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div class="mb-4">
+        <h2 class="text-lg font-bold">Create purchase order</h2>
+        <p class="mt-1 text-sm text-slate-500">Creating an order does not change stock. Stock changes only when you record received quantities.</p>
+      </div>
+      {{#if activeSuppliers.length}}
+      {{#if products.length}}
+      <form action="/admin/purchase-orders" method="post" id="purchase-order-form" class="space-y-4">
+        <div class="grid gap-3 sm:grid-cols-2">
+          <label class="text-sm font-semibold">Supplier
+            <select name="supplierId" required class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2">
+              <option value="">Select a supplier</option>
+              {{#each activeSuppliers}}<option value="{{id}}">{{name}}</option>{{/each}}
+            </select>
+          </label>
+          <label class="text-sm font-semibold">Order note (optional)
+            <input name="note" maxlength="255" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2">
+          </label>
+        </div>
+        <div class="space-y-2" id="purchase-order-lines">
+          <div class="purchase-order-line grid gap-2 rounded-xl border border-slate-200 p-3 sm:grid-cols-[minmax(180px,1fr)_120px_140px_auto]">
+            <label class="text-xs font-semibold text-slate-600">Product
+              <select name="productId" data-order-product required class="mt-1 w-full rounded border border-slate-300 bg-white px-2 py-2 text-sm">
+                <option value="">Select a product</option>
+                {{#each products}}<option value="{{id}}" data-cost="{{costPrice}}">{{name}} · {{barcode}}</option>{{/each}}
+              </select>
+            </label>
+            <label class="text-xs font-semibold text-slate-600">Quantity
+              <input name="quantity" type="number" min="1" max="1000000" step="1" required class="mt-1 w-full rounded border border-slate-300 px-2 py-2 text-sm">
+            </label>
+            <label class="text-xs font-semibold text-slate-600">Expected unit cost (₱)
+              <input name="unitCost" type="number" min="0" max="99999999.99" step="0.01" value="0.00" required class="mt-1 w-full rounded border border-slate-300 px-2 py-2 text-sm">
+            </label>
+            <button type="button" data-remove-purchase-line class="self-end rounded border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50">Remove</button>
+          </div>
+        </div>
+        <template id="purchase-order-line-template">
+          <div class="purchase-order-line grid gap-2 rounded-xl border border-slate-200 p-3 sm:grid-cols-[minmax(180px,1fr)_120px_140px_auto]">
+            <label class="text-xs font-semibold text-slate-600">Product
+              <select name="productId" data-order-product required class="mt-1 w-full rounded border border-slate-300 bg-white px-2 py-2 text-sm">
+                <option value="">Select a product</option>
+                {{#each products}}<option value="{{id}}" data-cost="{{costPrice}}">{{name}} · {{barcode}}</option>{{/each}}
+              </select>
+            </label>
+            <label class="text-xs font-semibold text-slate-600">Quantity
+              <input name="quantity" type="number" min="1" max="1000000" step="1" required class="mt-1 w-full rounded border border-slate-300 px-2 py-2 text-sm">
+            </label>
+            <label class="text-xs font-semibold text-slate-600">Expected unit cost (₱)
+              <input name="unitCost" type="number" min="0" max="99999999.99" step="0.01" value="0.00" required class="mt-1 w-full rounded border border-slate-300 px-2 py-2 text-sm">
+            </label>
+            <button type="button" data-remove-purchase-line class="self-end rounded border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50">Remove</button>
+          </div>
+        </template>
+        <div class="flex flex-wrap gap-2">
+          <button type="button" id="add-purchase-order-line" class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50">Add product</button>
+          <button class="rounded-lg bg-pink-700 px-4 py-2 text-sm font-bold text-white hover:bg-pink-800">Create purchase order</button>
+        </div>
+      </form>
+      {{else}}
+      <p class="rounded-lg bg-amber-50 p-3 text-sm text-amber-800">Add an active product before creating a purchase order.</p>
+      {{/if}}
+      {{else}}
+      <p class="rounded-lg bg-amber-50 p-3 text-sm text-amber-800">Add an active supplier before creating a purchase order.</p>
+      {{/if}}
+    </section>
+
+    <section class="mt-7 space-y-3">
+      <div><h2 class="text-xl font-black text-slate-900">Recent purchase orders</h2><p class="mt-1 text-sm text-slate-500">Showing the latest 100 orders. Receive only the quantities that arrived.</p></div>
+      {{#each orders}}
+      <details class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <summary class="flex cursor-pointer flex-wrap items-center justify-between gap-3 px-5 py-4">
+          <span><strong class="text-slate-900">Purchase order #{{id}}</strong><span class="ml-3 text-sm text-slate-500">{{supplier.name}} · {{createdAtLabel}}</span></span>
+          <span class="flex flex-wrap items-center gap-3">
+            <span class="rounded-full px-2.5 py-1 text-xs font-bold {{#ifEquals status "received"}}bg-emerald-100 text-emerald-800{{else}}{{#ifEquals status "cancelled"}}bg-slate-100 text-slate-600{{else}}bg-amber-100 text-amber-800{{/ifEquals}}{{/ifEquals}}">{{#ifEquals status "partially_received"}}Partially received{{else}}{{status}}{{/ifEquals}}</span>
+            <strong>₱{{totalCost}}</strong>
+          </span>
+        </summary>
+        <div class="border-t border-slate-100 px-5 py-4">
+          <div class="mb-4 flex flex-wrap justify-between gap-2 text-sm">
+            <p><span class="text-slate-500">Created by:</span> <strong>{{creator.name}}</strong></p>
+            {{#if note}}<p><span class="text-slate-500">Note:</span> {{note}}</p>{{/if}}
+          </div>
+          {{#if canCancel}}<form id="cancel-order-{{id}}" action="/admin/purchase-orders/{{id}}/cancel" method="post" class="hidden" onsubmit="return confirm('Cancel this order? Any stock already received will remain in inventory.')"></form>{{/if}}
+          {{#if canReceive}}
+          <form action="/admin/purchase-orders/{{id}}/receive" method="post">
+            <div class="overflow-x-auto">
+              <table class="w-full min-w-[760px] text-left text-sm">
+                <thead class="bg-slate-50 text-xs uppercase text-slate-500"><tr><th class="px-3 py-2">Product</th><th class="px-3 py-2">Ordered</th><th class="px-3 py-2">Received</th><th class="px-3 py-2">Remaining</th><th class="px-3 py-2">Receive now</th><th class="px-3 py-2">Actual unit cost (₱)</th></tr></thead>
+                <tbody class="divide-y divide-slate-100">
+                  {{#each items}}
+                  <tr>
+                    <td class="px-3 py-3 font-semibold">{{productName}}</td>
+                    <td class="px-3 py-3">{{quantityOrdered}}</td>
+                    <td class="px-3 py-3">{{quantityReceived}}</td>
+                    <td class="px-3 py-3">{{remaining}}</td>
+                    <td class="px-3 py-3">
+                      {{#if ../canReceive}}
+                        {{#if remaining}}<input type="hidden" name="itemId" value="{{id}}"><input name="quantityReceived" type="number" min="0" max="{{remaining}}" step="1" value="0" aria-label="Quantity of {{productName}} received now" class="w-24 rounded border border-slate-300 px-2 py-1">{{else}}Complete{{/if}}
+                      {{else}}Complete{{/if}}
+                    </td>
+                    <td class="px-3 py-3">{{#if remaining}}<input name="unitCost" type="number" min="0" max="99999999.99" step="0.01" value="{{unitCost}}" aria-label="Actual unit cost for {{productName}}" class="w-32 rounded border border-slate-300 px-2 py-1">{{else}}—{{/if}}</td>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </div>
+            <div class="mt-4 flex flex-wrap items-end justify-between gap-3">
+              <label class="min-w-60 flex-1 text-xs font-semibold text-slate-600">Receipt note (optional)
+                <input name="note" maxlength="255" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+              </label>
+              <div class="flex gap-2">
+                {{#if canCancel}}<button type="submit" form="cancel-order-{{id}}" class="rounded-lg border border-red-200 px-4 py-2 text-sm font-bold text-red-700 hover:bg-red-50">Cancel order</button>{{/if}}
+                <button class="rounded-lg bg-emerald-700 px-4 py-2 text-sm font-bold text-white hover:bg-emerald-800">Record receipt &amp; update stock</button>
+              </div>
+            </div>
+          </form>
+          {{else}}
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[500px] text-left text-sm">
+              <thead class="bg-slate-50 text-xs uppercase text-slate-500"><tr><th class="px-3 py-2">Product</th><th class="px-3 py-2">Ordered</th><th class="px-3 py-2">Received</th><th class="px-3 py-2">Unit cost</th></tr></thead>
+              <tbody class="divide-y divide-slate-100">{{#each items}}<tr><td class="px-3 py-3 font-semibold">{{productName}}</td><td class="px-3 py-3">{{quantityOrdered}}</td><td class="px-3 py-3">{{quantityReceived}}</td><td class="px-3 py-3">₱{{unitCost}}</td></tr>{{/each}}</tbody>
+            </table>
+          </div>
+          {{#ifEquals status "cancelled"}}<p class="mt-3 text-sm font-semibold text-slate-500">Cancelled. Any stock already received remains in inventory.</p>{{/ifEquals}}
+          {{/if}}
+
+          {{#if receipts.length}}
+          <section class="mt-5 border-t border-slate-100 pt-4">
+            <h3 class="font-bold text-slate-900">Receipt history</h3>
+            <div class="mt-3 space-y-3">
+              {{#each receipts}}
+              <article class="rounded-xl bg-slate-50 p-3">
+                <p class="text-sm font-bold">Receipt #{{id}} · {{createdAtLabel}} · {{receiver.name}}</p>
+                {{#if note}}<p class="mt-1 text-xs text-slate-500">{{note}}</p>{{/if}}
+                <ul class="mt-2 space-y-1 text-sm">{{#each items}}<li>{{productName}} · {{quantity}} received at ₱{{unitCost}} each</li>{{/each}}</ul>
+              </article>
+              {{/each}}
+            </div>
+          </section>
+          {{/if}}
+        </div>
+      </details>
+      {{else}}
+      <div class="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500">No purchase orders yet.</div>
+      {{/each}}
+    </section>
+  </main>
+  {{> footer }}
+  <script>
+    const purchaseOrderLines = document.getElementById("purchase-order-lines");
+    const purchaseOrderLineTemplate = document.getElementById("purchase-order-line-template");
+    const addPurchaseOrderLine = document.getElementById("add-purchase-order-line");
+    if (purchaseOrderLines && purchaseOrderLineTemplate && addPurchaseOrderLine) {
+      addPurchaseOrderLine.addEventListener("click", () => {
+        purchaseOrderLines.append(purchaseOrderLineTemplate.content.firstElementChild.cloneNode(true));
+      });
+      purchaseOrderLines.addEventListener("change", (event) => {
+        const productSelect = event.target.closest("[data-order-product]");
+        if (!productSelect) return;
+        const unitCostInput = productSelect.closest(".purchase-order-line").querySelector("[name='unitCost']");
+        if (productSelect.selectedOptions[0].dataset.cost) {
+          unitCostInput.value = productSelect.selectedOptions[0].dataset.cost;
+        }
+      });
+      purchaseOrderLines.addEventListener("click", (event) => {
+        const removeButton = event.target.closest("[data-remove-purchase-line]");
+        if (removeButton && purchaseOrderLines.children.length > 1) removeButton.closest(".purchase-order-line").remove();
+      });
+    }
+  </script>
+</body>

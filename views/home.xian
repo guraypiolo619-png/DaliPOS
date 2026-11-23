@@ -1,0 +1,138 @@
+{{> head }}
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  {{> nav }}
+  <main class="mx-auto max-w-[1600px] px-4 py-6 sm:px-6 lg:px-8">
+    {{> alerts }}
+    <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="text-xs font-black uppercase tracking-[0.2em] text-pink-700">Admin overview</p>
+        <h1 class="mt-1 text-3xl font-black tracking-tight text-slate-900">Dashboard</h1>
+        <p class="mt-2 text-sm text-slate-500">Welcome back, {{user.name}}. Here's what's happening today.</p>
+      </div>
+      <a href="/pos" class="inline-flex items-center gap-2 rounded-xl bg-pink-600 px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-pink-700">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" class="h-5 w-5"><path d="M3 4h2l2.2 10.1a2 2 0 0 0 2 1.6h8.5a2 2 0 0 0 1.9-1.4L22 8H6M10 20h.01M18 20h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        New sale
+      </a>
+    </div>
+
+    {{#if lowStockCount}}
+    <section role="alert" class="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-pink-200 bg-pink-50 px-4 py-3.5">
+      <div class="flex items-center gap-3">
+        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-pink-100 text-pink-700">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" class="h-5 w-5"><path d="M12 3 2.8 19h18.4L12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 9v4m0 3h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </span>
+        <div><h2 class="font-bold text-pink-950">Low-stock alert · {{lowStockCount}} item(s) need attention</h2><p class="mt-0.5 text-sm text-pink-800">Review products with 10 or fewer items remaining.</p></div>
+      </div>
+      <a href="/admin/stock-history" class="text-sm font-bold text-pink-800 hover:underline">Review inventory <span aria-hidden="true">→</span></a>
+    </section>
+    {{/if}}
+
+    <section aria-label="Store statistics" class="grid gap-4 sm:grid-cols-2 2xl:grid-cols-4">
+      <article class="flex items-center justify-between rounded-2xl border border-pink-100 bg-white p-5 shadow-sm">
+        <div><p class="text-sm font-medium text-slate-500">Today's sales</p><p class="mt-1 text-2xl font-black text-slate-900">₱{{todayRevenue}}</p><p class="mt-1 text-xs font-semibold text-emerald-600">{{todayItems}} items sold</p></div>
+        <span class="grid h-12 w-12 place-items-center rounded-xl bg-pink-50 text-pink-600"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" class="h-6 w-6"><path d="M3 4h2l2.2 10.1a2 2 0 0 0 2 1.6h8.5a2 2 0 0 0 1.9-1.4L22 8H6M10 20h.01M18 20h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </article>
+      <article class="flex items-center justify-between rounded-2xl border border-pink-100 bg-white p-5 shadow-sm">
+        <div><p class="text-sm font-medium text-slate-500">Active products</p><p class="mt-1 text-2xl font-black text-slate-900">{{productCount}}</p><a href="/admin/products" class="mt-1 inline-block text-xs font-semibold text-pink-700 hover:underline">Manage products</a></div>
+        <span class="grid h-12 w-12 place-items-center rounded-xl bg-pink-50 text-pink-600"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" class="h-6 w-6"><path d="m12 3 9 5-9 5-9-5 9-5Zm-9 9 9 5 9-5m-18 5 9 5 9-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </article>
+      <article class="flex items-center justify-between rounded-2xl border border-pink-100 bg-white p-5 shadow-sm">
+        <div><p class="text-sm font-medium text-slate-500">Completed sales</p><p class="mt-1 text-2xl font-black text-slate-900">{{salesCount}}</p><a href="/sales" class="mt-1 inline-block text-xs font-semibold text-pink-700 hover:underline">View transactions</a></div>
+        <span class="grid h-12 w-12 place-items-center rounded-xl bg-pink-50 text-pink-600"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" class="h-6 w-6"><path d="M6 3h12a2 2 0 0 1 2 2v16l-3-2-3 2-3-2-3 2-4-2V5a2 2 0 0 1 2-2Zm3 6h6m-6 4h6m-6 4h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </article>
+      <article class="flex items-center justify-between rounded-2xl border border-pink-100 bg-white p-5 shadow-sm">
+        <div><p class="text-sm font-medium text-slate-500">Low-stock items</p><p class="mt-1 text-2xl font-black {{#if lowStockCount}}text-pink-700{{else}}text-slate-900{{/if}}">{{lowStockCount}}</p><a href="/admin/stock-history" class="mt-1 inline-block text-xs font-semibold text-pink-700 hover:underline">Check inventory</a></div>
+        <span class="grid h-12 w-12 place-items-center rounded-xl bg-pink-50 text-pink-600"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" class="h-6 w-6"><path d="M12 3 2.8 19h18.4L12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 9v4m0 3h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+      </article>
+    </section>
+
+    <section class="mt-5 grid gap-5 xl:grid-cols-[minmax(0,1.35fr)_minmax(320px,.85fr)]">
+      <article id="sales-overview" class="rounded-2xl border border-pink-100 bg-white p-5 shadow-sm sm:p-6">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div><h2 class="text-lg font-black text-slate-900">Sales Overview</h2><p class="mt-0.5 text-sm text-slate-500">Revenue over the last six months</p></div>
+          <span class="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600">Last 6 months</span>
+        </div>
+        <div class="mt-5">
+          <svg role="img" aria-label="Monthly sales trend for the last six months" viewBox="0 0 600 250" class="h-56 w-full overflow-visible sm:h-64">
+            <defs>
+              <linearGradient id="sales-area-fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#ec4899" stop-opacity=".28"/><stop offset="100%" stop-color="#ec4899" stop-opacity=".02"/></linearGradient>
+            </defs>
+            <g stroke="#f1edf2" stroke-width="1"><path d="M50 55H550"/><path d="M50 95H550"/><path d="M50 135H550"/><path d="M50 175H550"/><path d="M50 215H550"/></g>
+            <polygon points="50,215 {{trendPath}} 550,215" fill="url(#sales-area-fill)"/>
+            <polyline points="{{trendPath}}" fill="none" stroke="#db2777" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            {{#each trend}}<circle cx="{{x}}" cy="{{y}}" r="5.5" fill="#db2777" stroke="white" stroke-width="3"><title>{{dateLabel}}: ₱{{total}}</title></circle>{{/each}}
+          </svg>
+          <div class="-mt-1 grid grid-cols-6 text-center text-xs font-semibold text-slate-500">
+            {{#each trend}}<span>{{label}}</span>{{/each}}
+          </div>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-x-4 gap-y-1 border-t border-slate-100 pt-3">
+          {{#each trend}}<span class="text-xs text-slate-500">{{dateLabel}} <strong class="text-slate-700">₱{{total}}</strong></span>{{/each}}
+        </div>
+      </article>
+
+      <article class="rounded-2xl border border-pink-100 bg-white p-5 shadow-sm sm:p-6">
+        <div class="flex items-center justify-between gap-3">
+          <div><h2 class="text-lg font-black text-slate-900">Recent Activity</h2><p class="mt-0.5 text-sm text-slate-500">Latest completed sales</p></div>
+          <a href="/sales" class="shrink-0 text-sm font-bold text-pink-700 hover:underline">View all <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="mt-4 divide-y divide-slate-100">
+          {{#each recentSales}}
+          <a href="/sales/{{id}}/receipt" class="flex items-center gap-3 py-3.5 first:pt-1 hover:bg-pink-50/60">
+            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-pink-50 text-pink-600"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" class="h-5 w-5"><path d="M6 3h12a2 2 0 0 1 2 2v16l-3-2-3 2-3-2-3 2-4-2V5a2 2 0 0 1 2-2Zm3 6h6m-6 4h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="min-w-0 flex-1"><span class="block truncate text-sm font-bold text-slate-800">New sale · #{{id}}</span><span class="mt-0.5 block truncate text-xs text-slate-500">{{cashier.name}} · {{createdAt}}</span></span>
+            <span class="shrink-0 text-right text-sm font-bold text-slate-900">₱{{total}}</span>
+          </a>
+          {{else}}
+          <p class="py-10 text-center text-sm text-slate-500">No sales recorded yet.</p>
+          {{/each}}
+        </div>
+      </article>
+    </section>
+
+    <section class="mt-5 overflow-hidden rounded-2xl border border-pink-100 bg-white shadow-sm">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-5 py-4">
+        <div><h2 class="font-black text-slate-900">Recent Sales</h2><p class="text-sm text-slate-500">Latest completed transactions</p></div>
+        <div class="flex w-full flex-wrap gap-2 sm:w-auto"><input data-table-search="recent-sales" type="search" placeholder="Search transactions..." class="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm sm:w-52"><select data-sales-period class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm"><option value="all">Any date</option><option value="today">Today</option><option value="week">Last 7 days</option><option value="month">This month</option></select></div>
+      </div>
+      <div class="overflow-x-auto">
+        <table id="recent-sales" class="w-full min-w-[700px] text-left text-sm">
+          <thead class="bg-pink-50/70 text-xs uppercase text-slate-500"><tr><th class="px-5 py-3">Receipt / cashier</th><th class="px-5 py-3">Products sold</th><th class="px-5 py-3">Date & time</th><th class="px-5 py-3 text-right">Total</th></tr></thead>
+          <tbody class="divide-y divide-slate-100">
+            {{#each recentSales}}
+            <tr data-created-at="{{createdAtMs}}">
+              <td class="px-5 py-4"><a href="/sales/{{id}}/receipt" class="font-bold text-pink-700 hover:underline">#{{id}}</a><span class="mt-1 block text-xs text-slate-500">{{cashier.name}}</span></td>
+              <td class="px-5 py-4"><div class="space-y-1">{{#each items}}<p>{{productName}} <span class="text-slate-500">× {{quantity}}</span></p>{{/each}}</div></td>
+              <td class="whitespace-nowrap px-5 py-4 text-slate-500">{{createdAt}}</td>
+              <td class="px-5 py-4 text-right font-bold text-slate-900">₱{{total}}</td>
+            </tr>
+            {{else}}
+            <tr><td colspan="4" class="px-5 py-10 text-center text-slate-500">No sales recorded yet.</td></tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  {{> footer }}
+  <script>
+    const salesSearch = document.querySelector("[data-table-search='recent-sales']");
+    const salesPeriod = document.querySelector("[data-sales-period]");
+    const salesRows = Array.from(document.querySelectorAll("#recent-sales tbody tr[data-created-at]"));
+    const filterSales = () => {
+      const query = salesSearch.value.trim().toLowerCase();
+      const now = new Date();
+      const dayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+      const periodStart = salesPeriod.value === "today" ? dayStart
+        : salesPeriod.value === "week" ? now.getTime() - 7 * 24 * 60 * 60 * 1000
+        : salesPeriod.value === "month" ? new Date(now.getFullYear(), now.getMonth(), 1).getTime()
+        : 0;
+      salesRows.forEach((row) => {
+        row.hidden = !row.textContent.toLowerCase().includes(query) || Number(row.dataset.createdAt) < periodStart;
+      });
+    };
+    salesSearch.addEventListener("input", filterSales);
+    salesPeriod.addEventListener("change", filterSales);
+  </script>
+</body>
+</html>

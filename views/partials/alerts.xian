@@ -1,0 +1,28 @@
+<div data-toast-container class="pointer-events-none fixed left-4 right-4 top-4 z-50 flex flex-col gap-3 sm:left-auto sm:w-96">
+  {{#each success_msg}}
+    <div data-toast role="status" class="pointer-events-auto rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 shadow-lg transition duration-300">{{this}}</div>
+  {{/each}}
+  {{#each error_msg}}
+    <div data-toast role="alert" class="pointer-events-auto rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 shadow-lg transition duration-300">{{this}}</div>
+  {{/each}}
+</div>
+<script>
+  const toastContainer = document.querySelector("[data-toast-container]");
+  const dismissToast = (toast, delay = 5000) => {
+    window.setTimeout(() => {
+      toast.classList.add("translate-y-2", "opacity-0");
+      window.setTimeout(() => toast.remove(), 300);
+    }, delay);
+  };
+  document.querySelectorAll("[data-toast]").forEach((toast) => dismissToast(toast));
+  window.showDaliToast = (message, isError = false) => {
+    const toast = document.createElement("div");
+    toast.setAttribute("role", isError ? "alert" : "status");
+    toast.className = isError
+      ? "pointer-events-auto rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 shadow-lg transition duration-300"
+      : "pointer-events-auto rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 shadow-lg transition duration-300";
+    toast.textContent = message;
+    toastContainer.append(toast);
+    dismissToast(toast, isError ? 8000 : 5000);
+  };
+</script>

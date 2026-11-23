@@ -1,0 +1,75 @@
+{{> head }}
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  {{> nav }}
+  <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    {{> alerts }}
+    <div class="mb-7">
+      <p class="text-sm font-bold uppercase tracking-wider text-pink-700">Admin · Compliance</p>
+      <h1 class="mt-1 text-3xl font-black text-slate-900">DALIAudit</h1>
+      <p class="mt-2 text-slate-500">Browse store compliance details and inspection records from DALIAudit.</p>
+    </div>
+
+    <section class="mb-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div class="border-b border-slate-100 px-5 py-4">
+        <h2 class="font-bold text-slate-900">Stores</h2>
+        <p class="text-sm text-slate-500">Store identity, compliance status, rating, and latest inspection.</p>
+      </div>
+      {{#if storesError}}
+      <p role="alert" class="m-5 rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-800">{{storesError}}</p>
+      {{else}}
+      <div class="grid gap-4 p-5 sm:grid-cols-2 xl:grid-cols-3">
+        {{#each stores}}
+        <article class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <dl class="grid gap-3 sm:grid-cols-2">
+            {{#each fields}}
+            <div class="min-w-0">
+              <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{label}}</dt>
+              <dd class="mt-1 break-words text-sm font-medium text-slate-900">{{value}}</dd>
+            </div>
+            {{/each}}
+          </dl>
+        </article>
+        {{else}}
+        <p class="py-5 text-sm text-slate-500">DALIAudit returned no stores.</p>
+        {{/each}}
+      </div>
+      {{/if}}
+    </section>
+
+    <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div class="flex flex-wrap items-end justify-between gap-4 border-b border-slate-100 px-5 py-4">
+        <div>
+          <h2 class="font-bold text-slate-900">Inspections</h2>
+          <p class="text-sm text-slate-500">Filter inspection history by store code or status.</p>
+        </div>
+        <form method="get" class="flex flex-wrap gap-2">
+          <input name="storeCode" value="{{filters.storeCode}}" maxlength="32" placeholder="Store code" aria-label="Filter by store code" class="w-36 rounded-lg border border-slate-300 px-3 py-2 text-sm">
+          <input name="status" value="{{filters.status}}" maxlength="64" placeholder="Status" aria-label="Filter by status" class="w-36 rounded-lg border border-slate-300 px-3 py-2 text-sm">
+          <button class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-bold text-white hover:bg-slate-700">Filter</button>
+          <a href="/admin/daliaudit" class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50">Clear</a>
+        </form>
+      </div>
+      {{#if inspectionsError}}
+      <p role="alert" class="m-5 rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-800">{{inspectionsError}}</p>
+      {{else}}
+      <div class="grid gap-4 p-5 sm:grid-cols-2 xl:grid-cols-3">
+        {{#each inspections}}
+        <article class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <dl class="grid gap-3 sm:grid-cols-2">
+            {{#each fields}}
+            <div class="min-w-0">
+              <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{label}}</dt>
+              <dd class="mt-1 break-words text-sm font-medium text-slate-900">{{value}}</dd>
+            </div>
+            {{/each}}
+          </dl>
+        </article>
+        {{else}}
+        <p class="py-5 text-sm text-slate-500">No inspections matched these filters.</p>
+        {{/each}}
+      </div>
+      {{/if}}
+    </section>
+  </main>
+  {{> footer }}
+</body>

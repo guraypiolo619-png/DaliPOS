@@ -1,0 +1,61 @@
+{{> head }}
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  {{> nav }}
+  <main class="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
+    {{> alerts }}
+    <div class="mb-6">
+      <p class="text-xs font-bold uppercase tracking-[0.18em] text-pink-700">Security & access</p>
+      <h1 class="mt-1 text-3xl font-black tracking-tight text-slate-900">Activity logs</h1>
+      <p class="mt-2 text-slate-500">Admin and staff sign-ins, sign-outs, and session duration.</p>
+    </div>
+
+    <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div class="flex flex-wrap items-end justify-between gap-4 border-b border-slate-100 px-5 py-4">
+        <div><h2 class="font-bold text-slate-900">Login & logout events</h2><p class="text-sm text-slate-500">Latest 200 events · newest first</p></div>
+        <form method="get" class="flex flex-wrap gap-2">
+          <select name="role" aria-label="Filter by role" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm">
+            <option value="">All roles</option>
+            <option value="admin" {{#ifEquals filters.role "admin"}}selected{{/ifEquals}}>Admin</option>
+            <option value="staff" {{#ifEquals filters.role "staff"}}selected{{/ifEquals}}>Staff</option>
+          </select>
+          <input name="date" type="date" aria-label="Filter by date" value="{{filters.date}}" class="rounded-lg border border-slate-300 px-3 py-2 text-sm">
+          <button class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-bold text-white">Apply</button>
+          <a href="/admin/activity-logs" class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600">Reset</a>
+        </form>
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-5 py-3">
+        <p class="text-xs text-slate-500">Session duration is measured from login until logout. Active sessions are ongoing.</p>
+        <input data-table-search="activity-table" type="search" placeholder="Search activity..." class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm sm:w-64">
+      </div>
+      <div class="overflow-x-auto">
+        <table id="activity-table" class="w-full min-w-[780px] text-left text-sm">
+          <thead class="bg-slate-50 text-xs uppercase text-slate-500"><tr><th class="px-5 py-3">User</th><th class="px-5 py-3">Role</th><th class="px-5 py-3">Action</th><th class="px-5 py-3">Date & timestamp</th><th class="px-5 py-3">Session duration / status</th></tr></thead>
+          <tbody class="divide-y divide-slate-100">
+            {{#each logs}}
+            <tr>
+              <td class="px-5 py-4 font-semibold text-slate-900">{{userName}}</td>
+              <td class="px-5 py-4"><span class="rounded-full px-2.5 py-1 text-xs font-bold {{#ifEquals role "admin"}}bg-violet-100 text-violet-800{{else}}bg-sky-100 text-sky-800{{/ifEquals}}">{{roleLabel}}</span></td>
+              <td class="px-5 py-4"><span class="rounded-full px-2.5 py-1 text-xs font-bold {{#ifEquals action "login"}}bg-emerald-100 text-emerald-800{{else}}bg-slate-100 text-slate-700{{/ifEquals}}">{{actionLabel}}</span></td>
+              <td class="whitespace-nowrap px-5 py-4 text-slate-500">{{occurredAt}}</td>
+              <td class="px-5 py-4"><span class="font-semibold">{{durationLabel}}</span><span class="ml-2 rounded-full px-2 py-1 text-xs font-bold {{#ifEquals status "active"}}bg-emerald-100 text-emerald-800{{else}}bg-slate-100 text-slate-600{{/ifEquals}}">{{statusLabel}}</span></td>
+            </tr>
+            {{else}}
+            <tr><td colspan="5" class="px-5 py-10 text-center text-slate-500">No login or logout events match these filters.</td></tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  {{> footer }}
+  <script>
+    document.querySelectorAll("[data-table-search]").forEach((input) => {
+      input.addEventListener("input", () => {
+        const table = document.getElementById(input.dataset.tableSearch);
+        const query = input.value.trim().toLowerCase();
+        table.querySelectorAll("tbody tr").forEach((row) => {
+          row.hidden = !row.textContent.toLowerCase().includes(query);
+        });
+      });
+    });
+  </script>

@@ -1,0 +1,37 @@
+{{> head }}
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  {{> nav }}
+  <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+    {{> alerts }}
+    <div class="mb-7"><p class="text-sm font-bold uppercase tracking-wider text-pink-700">Sales register</p><h1 class="mt-1 text-3xl font-black text-slate-900">Sales</h1><p class="mt-2 text-slate-500">Latest 100 completed or voided transactions.</p></div>
+    <section class="space-y-4">
+      {{#each sales}}
+      <details class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <summary class="flex cursor-pointer flex-wrap items-center justify-between gap-3 px-5 py-4">
+          <span><strong class="text-slate-900">Receipt #{{id}}</strong><span class="ml-3 text-sm text-slate-500">{{cashier.name}} · {{createdAt}}</span></span>
+          <span class="flex items-center gap-3"><span class="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-bold text-emerald-800">{{status}}</span><strong>₱{{total}}</strong></span>
+        </summary>
+        <div class="border-t border-slate-100 px-5 py-4">
+          <div class="mb-4 grid gap-2 text-sm sm:grid-cols-2">
+            <p><span class="text-slate-500">Customer:</span> <strong>{{customerName}}</strong></p>
+            <p><span class="text-slate-500">Payment:</span> <strong>{{paymentMethodLabel}}</strong></p>
+          </div>
+          <div class="space-y-2">
+            {{#each items}}
+            <div class="flex justify-between gap-4 text-sm"><span>{{quantity}} × {{productName}} <span class="text-slate-400">(₱{{unitPrice}})</span></span><strong>₱{{subtotal}}</strong></div>
+            {{/each}}
+          </div>
+          <div class="mt-4 ml-auto max-w-xs space-y-1 border-t border-slate-100 pt-3 text-sm">
+            <div class="flex justify-between"><span class="text-slate-500">Subtotal</span><strong>₱{{subtotal}}</strong></div>
+            <div class="flex justify-between"><span class="text-slate-500">Tax (12%)</span><strong>₱{{taxAmount}}</strong></div>
+            <div class="flex justify-between font-black"><span>Total</span><span>₱{{total}}</span></div>
+          </div>
+          <div class="mt-4 flex justify-end"><a href="/sales/{{id}}/receipt" class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-bold text-white hover:bg-pink-700">View / print receipt</a></div>
+        </div>
+      </details>
+      {{else}}
+      <div class="rounded-2xl border border-slate-200 bg-white p-10 text-center text-slate-500">No sales recorded yet.</div>
+      {{/each}}
+    </section>
+  </main>
+  {{> footer }}

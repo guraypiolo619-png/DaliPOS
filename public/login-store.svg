@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="ceiling" x2="0" y2="1">
+      <stop stop-color="#37102d"/>
+      <stop offset="1" stop-color="#79164c"/>
+    </linearGradient>
+    <linearGradient id="floor" x2="0" y2="1">
+      <stop stop-color="#8f285e"/>
+      <stop offset="1" stop-color="#321029"/>
+    </linearGradient>
+    <linearGradient id="pink-wash" x2="1" y2="1">
+      <stop stop-color="#ed0875" stop-opacity=".65"/>
+      <stop offset=".52" stop-color="#b50058" stop-opacity=".42"/>
+      <stop offset="1" stop-color="#f329a2" stop-opacity=".68"/>
+    </linearGradient>
+    <pattern id="products" width="160" height="118" patternUnits="userSpaceOnUse">
+      <rect x="12" y="18" width="28" height="52" rx="3" fill="#f3b44c"/>
+      <rect x="45" y="27" width="24" height="43" rx="3" fill="#78b7a5"/>
+      <rect x="76" y="12" width="34" height="58" rx="4" fill="#df6082"/>
+      <rect x="116" y="24" width="30" height="46" rx="3" fill="#d9c4a0"/>
+      <path d="M18 29h16M51 38h12M82 25h22M122 35h18" stroke="#fff4e8" stroke-opacity=".7" stroke-width="4"/>
+      <rect x="0" y="75" width="160" height="7" fill="#e7a5c1"/>
+      <rect x="0" y="83" width="160" height="5" fill="#3c1736"/>
+    </pattern>
+    <clipPath id="left-shelf">
+      <path d="M0 100 650 246v520L0 658Z"/>
+    </clipPath>
+    <clipPath id="right-shelf">
+      <path d="m1600 95-650 151v520l650-108Z"/>
+    </clipPath>
+    <linearGradient id="vignette" x2="0" y2="1">
+      <stop stop-color="#26091f" stop-opacity=".2"/>
+      <stop offset=".5" stop-color="#4f0a36" stop-opacity="0"/>
+      <stop offset="1" stop-color="#25081f" stop-opacity=".5"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="#41102f"/>
+  <path d="M0 0h1600v275H0z" fill="url(#ceiling)"/>
+  <path d="m0 275 650-29h300l650 29v725H0z" fill="url(#floor)"/>
+  <path d="m0 105 650 141v520L0 658Z" fill="#421531"/>
+  <path d="m1600 95-650 151v520l650-108Z" fill="#421531"/>
+  <g clip-path="url(#left-shelf)">
+    <rect x="0" y="90" width="660" height="700" fill="url(#products)"/>
+    <path d="m0 220 650 144M0 325l650 144M0 430l650 144M0 535l650 144M0 640l650 144" stroke="#e5b3ca" stroke-width="13"/>
+    <path d="m0 234 650 144M0 339l650 144M0 444l650 144M0 549l650 144M0 654l650 144" stroke="#341029" stroke-width="9"/>
+  </g>
+  <g clip-path="url(#right-shelf)">
+    <rect x="940" y="90" width="670" height="700" fill="url(#products)"/>
+    <path d="m1600 215-650 149m650-44-650 149m650-44-650 149m650-44-650 149m650-44-650 149" stroke="#e5b3ca" stroke-width="13"/>
+    <path d="m1600 229-650 149m650-44-650 149m650-44-650 149m650-44-650 149m650-44-650 149" stroke="#341029" stroke-width="9"/>
+  </g>
+  <g fill="#fff0fa" opacity=".8">
+    <path d="m180 35 34 8-20 62-34-8z"/>
+    <path d="m462 19 34 4-14 64-35-4z"/>
+    <path d="m742 14 36 1-4 68-36-1z"/>
+    <path d="m1035 19 34-4 14 64-35 4z"/>
+    <path d="m1324 43 34-8 20 62-34 8z"/>
+  </g>
+  <path d="m0 1000 650-548m950 548L950 452M800 1000V453M220 1000l490-548m670 548L890 452" fill="none" stroke="#f9b8d7" stroke-opacity=".24" stroke-width="5"/>
+  <g fill="none" stroke="#ff55ae" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m0 665 650 72-70 240L0 866Z" fill="#c9086f" fill-opacity=".72" stroke-width="10"/>
+    <path d="m65 689-46 172m137-158-37 182m131-171-28 195m122-181-20 203m112-191-10 211m107-199 2 218" stroke-width="5" opacity=".8"/>
+    <path d="m0 718 629 69M0 770l614 63M0 820l598 56" stroke-width="5" opacity=".8"/>
+    <path d="M0 663h118l83 38" stroke-width="14"/>
+    <path d="m575 974 105 16m-56-15 33-95" stroke-width="16"/>
+  </g>
+  <path d="M0 0h520C410 110 279 100 189 185 104 265 52 365 0 465Z" fill="#ed0875" opacity=".64"/>
+  <path d="M1600 1000h-425c151-117 271-227 335-390 42-108 70-207 90-335Z" fill="#eb1687" opacity=".46"/>
+  <rect width="1600" height="1000" fill="url(#pink-wash)"/>
+  <rect width="1600" height="1000" fill="url(#vignette)"/>
+</svg>

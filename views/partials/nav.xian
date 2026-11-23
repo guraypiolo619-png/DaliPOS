@@ -1,0 +1,83 @@
+{{> sidebar }}
+<div class="min-h-screen {{#if user}}md:pl-56{{/if}}">
+  <header class="sticky top-0 z-20 border-b-4 border-amber-400 bg-white/95 shadow-sm backdrop-blur">
+    <div class="mx-auto flex max-w-[1600px] items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
+      <a href="{{#if user}}/dashboard{{else}}/login{{/if}}" class="flex items-center gap-2 md:hidden">
+        <span class="grid h-9 w-9 place-items-center rounded-xl bg-pink-700 text-[9px] font-black text-amber-300">DALI</span>
+        <span class="text-sm font-black tracking-wide text-slate-900">DALI <span class="text-pink-700">STORE</span></span>
+      </a>
+      <div class="hidden md:block">
+        <p class="text-[10px] font-black uppercase tracking-[0.2em] text-pink-700">DALI Store Operations</p>
+        <p class="text-sm font-semibold text-slate-500">Point of sale &amp; inventory management</p>
+      </div>
+      {{#if user}}
+      <div class="ml-auto flex items-center gap-3">
+        <div class="hidden text-right sm:block">
+          <p class="max-w-48 truncate text-sm font-bold text-slate-900">{{user.name}}</p>
+          <p class="text-[10px] font-bold uppercase tracking-wider text-slate-500">{{user.role}}</p>
+        </div>
+        <button type="button" id="mobile-nav-toggle" aria-controls="mobile-navigation" aria-expanded="false" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-sm font-bold text-slate-700 hover:bg-slate-100 md:hidden">
+          <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" class="h-4 w-4"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <span data-menu-label>Menu</span>
+        </button>
+      </div>
+      {{else}}
+      <a href="/login" class="ml-auto rounded-xl bg-pink-700 px-4 py-2 text-sm font-bold text-white hover:bg-pink-800">Sign in</a>
+      {{/if}}
+    </div>
+    {{#if user}}
+    <nav id="mobile-navigation" aria-label="Mobile navigation" class="hidden border-t border-slate-200 bg-white px-4 py-3 md:hidden">
+      <div class="mx-auto flex max-w-[1600px] flex-wrap gap-2">
+        {{#ifEquals user.role "staff"}}
+        <a data-mobile-link href="/dashboard" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100">POS / Cashier</a>
+        {{/ifEquals}}
+        {{#if user.isAdmin}}
+        <a data-mobile-link href="/dashboard" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100">Dashboard</a>
+        <a data-mobile-link href="/pos" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100">POS / Cashier</a>
+        <a data-mobile-link href="/admin/products" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100">Products</a>
+        <a data-mobile-link href="/admin/stock-history" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100">Inventory</a>
+        <a data-mobile-link href="/sales" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100">Sales Transactions</a>
+        <a data-mobile-link href="/dashboard#sales-overview" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100">Reports &amp; Analytics</a>
+        <a data-mobile-link href="/admin/users" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100">Employees</a>
+        <a data-mobile-link href="/admin/purchase-orders" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100">Suppliers &amp; purchasing</a>
+        <a data-mobile-link href="/admin/activity-logs" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100">Activity logs</a>
+        <a data-mobile-link href="/admin/daliaudit" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100">DALIAudit</a>
+        {{/if}}
+        <form action="/logout" method="post" class="ml-auto"><button class="rounded-lg border border-slate-200 px-3 py-2 text-sm font-bold text-slate-700 hover:bg-slate-100">Logout</button></form>
+      </div>
+    </nav>
+    {{/if}}
+  </header>
+  <style>
+    [data-sidebar-link][aria-current="page"] { background: var(--dali-pink); border-left-color: #f9a8d4; color: white; }
+    [data-mobile-link][aria-current="page"] { background: #ffe4ec; color: var(--dali-pink-dark); }
+  </style>
+  <script>
+    const currentPath = window.location.pathname;
+    const isAnalyticsView = currentPath === "/dashboard" && window.location.hash === "#sales-overview";
+    document.querySelectorAll("[data-sidebar-link], [data-mobile-link]").forEach((link) => {
+      const linkUrl = new URL(link.href);
+      const isAnalyticsLink = linkUrl.hash === "#sales-overview";
+      const matchesPath = currentPath === linkUrl.pathname || (linkUrl.pathname !== "/" && currentPath.startsWith(`${linkUrl.pathname}/`));
+      if (matchesPath && isAnalyticsLink === isAnalyticsView) {
+        link.setAttribute("aria-current", "page");
+      }
+    });
+
+    const mobileMenuToggle = document.getElementById("mobile-nav-toggle");
+    const mobileNavigation = document.getElementById("mobile-navigation");
+    if (mobileMenuToggle && mobileNavigation) {
+      mobileMenuToggle.addEventListener("click", () => {
+        const isExpanded = mobileMenuToggle.getAttribute("aria-expanded") === "true";
+        mobileMenuToggle.setAttribute("aria-expanded", String(!isExpanded));
+        mobileNavigation.classList.toggle("hidden", isExpanded);
+        mobileMenuToggle.querySelector("[data-menu-label]").textContent = isExpanded ? "Menu" : "Close";
+      });
+      mobileNavigation.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          mobileMenuToggle.setAttribute("aria-expanded", "false");
+          mobileNavigation.classList.add("hidden");
+        });
+      });
+    }
+  </script>

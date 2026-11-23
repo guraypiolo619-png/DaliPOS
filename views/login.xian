@@ -1,0 +1,106 @@
+{{> head }}
+<body class="min-h-screen bg-pink-50 text-slate-800">
+  <main class="min-h-screen lg:grid lg:grid-cols-[1.12fr_.88fr]">
+    <section class="relative hidden min-h-screen overflow-hidden bg-pink-950 text-white lg:flex lg:flex-col lg:justify-between">
+      <img src="/login-store.svg" alt="" aria-hidden="true" class="absolute inset-0 h-full w-full object-cover">
+      <div aria-hidden="true" class="absolute inset-0 bg-gradient-to-br from-pink-800/35 via-pink-800/35 to-pink-950/75"></div>
+      <div aria-hidden="true" class="absolute -left-40 -top-52 h-[30rem] w-[42rem] -rotate-12 rounded-[45%] bg-pink-500/45"></div>
+      <div aria-hidden="true" class="absolute -bottom-64 -right-36 h-[34rem] w-[38rem] rotate-[-18deg] rounded-[48%] bg-pink-600/45"></div>
+
+      <div class="relative z-10 flex min-h-screen flex-col justify-between p-8 xl:p-14">
+        <div class="flex items-center gap-6">
+          <img src="/dali-pos-logo.svg" alt="DALI logo" class="h-28 w-24 shrink-0 drop-shadow-xl">
+          <div class="h-24 w-px bg-white/80"></div>
+          <div>
+            <p class="text-3xl font-black leading-tight xl:text-4xl">Dali Everyday<br>Grocery</p>
+            <p class="mt-2 text-sm font-medium tracking-wide text-pink-100 xl:text-base">Point of Sale System</p>
+          </div>
+        </div>
+
+        <div class="max-w-2xl py-10 pl-4 xl:pl-20">
+          <p class="font-serif text-4xl font-semibold italic leading-tight drop-shadow-lg xl:text-5xl">Shop Smart. Live Better.</p>
+          <svg aria-hidden="true" viewBox="0 0 300 24" fill="none" class="mt-2 h-6 w-64 text-pink-500 xl:ml-48 xl:w-80">
+            <path d="M4 19c81-24 174-26 273-6l-24-9m24 9-27 7" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-white/35 pt-6 text-sm font-medium text-white sm:gap-x-8">
+          <span class="flex items-center gap-2">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" class="h-5 w-5 shrink-0"><path d="M3 4h2l2.2 10.1a2 2 0 0 0 2 1.6h8.5a2 2 0 0 0 1.9-1.4L22 8H6M10 20h.01M18 20h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Quality Products
+          </span>
+          <span aria-hidden="true" class="hidden h-7 w-px bg-white/60 sm:block"></span>
+          <span class="flex items-center gap-2">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" class="h-5 w-5 shrink-0"><path d="m12 3 8 3v5c0 4.5-3.1 8.2-8 10-4.9-1.8-8-5.5-8-10V6l8-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m8.5 11.5 2.3 2.3 4.7-4.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Affordable Prices
+          </span>
+          <span aria-hidden="true" class="hidden h-7 w-px bg-white/60 sm:block"></span>
+          <span class="flex items-center gap-2">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" class="h-5 w-5 shrink-0"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Better Everyday
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <section class="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-pink-100 via-pink-50 to-pink-200 p-4 sm:p-8 lg:p-10">
+      <div aria-hidden="true" class="absolute -right-24 -top-28 h-80 w-80 rounded-full border-[34px] border-pink-300/50"></div>
+      <div aria-hidden="true" class="absolute -bottom-48 -left-24 h-96 w-96 rounded-full border-[42px] border-pink-300/40"></div>
+
+      <div class="relative z-10 w-full max-w-[540px] rounded-[2rem] bg-white px-6 py-8 shadow-[0_24px_70px_rgba(115,23,69,0.16)] sm:px-10 sm:py-9 lg:px-12 lg:py-8">
+        <header class="text-center">
+          <img src="/dali-pos-logo.svg" alt="DALI logo" class="mx-auto h-28 w-24">
+          <h1 class="mt-2 text-2xl font-black tracking-tight text-pink-950 sm:text-3xl">Dali Everyday Grocery</h1>
+          <p class="mt-1 text-sm font-medium text-slate-600">Point of Sale System</p>
+          <div class="mx-auto mt-5 h-0.5 w-3/4 bg-gradient-to-r from-transparent via-pink-500 to-transparent"></div>
+          <h2 class="mt-5 text-3xl font-black tracking-tight text-pink-950">Welcome Back!</h2>
+          <p class="mt-1 text-sm text-slate-600">Sign in to your DALI POS account</p>
+        </header>
+
+        <div class="mt-5">{{> alerts }}</div>
+        <form action="/login" method="post" class="mt-5 space-y-4">
+          <label for="email" class="block text-sm font-bold text-slate-700">Email address
+            <span class="relative mt-1.5 block">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500"><path d="M4 6h16v12H4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <input id="email" name="email" type="email" autocomplete="username" required placeholder="Email address" class="w-full rounded-xl border border-slate-300 bg-white py-3 pl-12 pr-4 text-sm font-medium text-slate-900 outline-none transition placeholder:font-normal placeholder:text-slate-500 focus:border-pink-600 focus:ring-4 focus:ring-pink-100">
+            </span>
+          </label>
+          <label for="password" class="block text-sm font-bold text-slate-700">Password
+            <span class="relative mt-1.5 block">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500"><rect x="5" y="10" width="14" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 10V7a4 4 0 1 1 8 0v3M12 14v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="Password" class="w-full rounded-xl border border-slate-300 bg-white py-3 pl-12 pr-12 text-sm font-medium text-slate-900 outline-none transition placeholder:font-normal placeholder:text-slate-500 focus:border-pink-600 focus:ring-4 focus:ring-pink-100">
+              <button id="toggle-password" type="button" aria-label="Show password" aria-controls="password" aria-pressed="false" class="absolute right-2 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-lg text-slate-500 hover:bg-pink-50 hover:text-pink-700">
+                <svg data-show-password aria-hidden="true" viewBox="0 0 24 24" fill="none" class="h-5 w-5"><path d="M2.5 12s3.2-6 9.5-6 9.5 6 9.5 6-3.2 6-9.5 6-9.5-6-9.5-6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="1.8"/></svg>
+                <svg data-hide-password aria-hidden="true" viewBox="0 0 24 24" fill="none" class="hidden h-5 w-5"><path d="m3 3 18 18M10.6 6.2A10.7 10.7 0 0 1 12 6c6.3 0 9.5 6 9.5 6a16 16 0 0 1-3.1 3.8M6.2 6.2C3.8 7.8 2.5 12 2.5 12s3.2 6 9.5 6c1 0 1.9-.2 2.7-.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </button>
+            </span>
+          </label>
+          <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-xl bg-pink-600 px-4 py-3.5 font-bold text-white shadow-lg shadow-pink-700/20 transition hover:bg-pink-700 focus-visible:outline-offset-4">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" class="h-5 w-5"><path d="M13 5h5a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-5M10 8l4 4-4 4m4-4H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Sign in</span>
+          </button>
+        </form>
+
+        <p class="mt-5 text-center text-xs leading-5 text-slate-500">Authorized DALI POS users only. Contact your administrator if you need access.</p>
+      </div>
+    </section>
+  </main>
+  <script>
+    (() => {
+      const passwordInput = document.getElementById("password");
+      const passwordToggle = document.getElementById("toggle-password");
+      const showPasswordIcon = passwordToggle.querySelector("[data-show-password]");
+      const hidePasswordIcon = passwordToggle.querySelector("[data-hide-password]");
+
+      passwordToggle.addEventListener("click", () => {
+        const shouldShowPassword = passwordInput.type === "password";
+        passwordInput.type = shouldShowPassword ? "text" : "password";
+        passwordToggle.setAttribute("aria-label", shouldShowPassword ? "Hide password" : "Show password");
+        passwordToggle.setAttribute("aria-pressed", String(shouldShowPassword));
+        showPasswordIcon.classList.toggle("hidden", shouldShowPassword);
+        hidePasswordIcon.classList.toggle("hidden", !shouldShowPassword);
+      });
+    })();
+  </script>
+</body>
+</html>
