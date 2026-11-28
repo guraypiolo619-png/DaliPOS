@@ -15,6 +15,7 @@
     "migrate": "node migrate.js",
     "seed:admin": "node scripts/seed-admin.js",
     "seed:products": "node scripts/seed-products.js",
+    "seed:suppliers": "node scripts/seed-suppliers.js",
     "create:model": "node create.js model",
     "create:controller": "node create.js controller",
     "create:add-middleware": "node create.js middleware",
